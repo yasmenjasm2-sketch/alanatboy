@@ -10,19 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    /* 1. التنسيقات العامة والخلفية */
+    /* 1. التنسيقات العامة */
     body {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* خلفية متدرجة فخمة */
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: #fff;
       text-align: center;
-      font-family: 'Tajawal', sans-serif; /* تطبيق الخط الجديد */
+      font-family: 'Tajawal', sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      overflow-x: hidden; /* منع التمرير الأفقي للصفحة كاملة */
+      overflow-x: hidden;
     }
 
-    /* 2. تنسيق النصوص والعناوين */
     h1 {
       margin: 40px 0 10px;
       font-size: 2.5rem;
@@ -36,12 +35,12 @@
       font-size: 1.1rem;
     }
 
-    /* 3. شريط الصور المتحرك (Infinite Scroll Slider) */
+    /* 2. شريط الصور المتحرك (Infinite Scroll Slider) */
     .slider-container {
-      background: rgba(255, 255, 255, 0.05); /* خلفية شفافة للشريط */
+      background: rgba(255, 255, 255, 0.05);
       padding: 20px 0;
       margin: 30px 0;
-      overflow: hidden; /* إخفاء ما يخرج عن الإطار */
+      overflow: hidden;
       position: relative;
       width: 100%;
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
@@ -51,14 +50,17 @@
     .slider-track {
       display: flex;
       gap: 20px; /* المسافة بين الصور */
-      width: calc(250px * 10); /* عرض تقريبي لعدد الصور */
-      animation: scroll 20s linear infinite; /* سرعة الحركة */
+      /* الحساب: (عرض الصورة 250 + الفراغ 20) * (عدد الصور الكلي 12)
+         270 * 12 = 3240px تقريباً
+      */
+      width: calc(270px * 12); 
+      animation: scroll 20s linear infinite; /* حركة مستمرة */
     }
 
     .slide {
       height: 150px;
       width: 250px;
-      flex-shrink: 0; /* منع تقلص الصور */
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -74,26 +76,27 @@
     }
     
     .slide img:hover {
-      transform: scale(1.05); /* تكبير بسيط عند المرور */
+      transform: scale(1.05);
       border-color: #fff;
     }
 
-    /* أنيميشن التحرك */
+    /* خدعة الحركة اللانهائية:
+       نحرك الشريط بمقدار نصف طوله (طول الصور الأصلية فقط)
+       عندما يصل للنهاية، يعود للصفر فوراً، وبما أن الصور مكررة، العين لا تلاحظ القفزة.
+       الحساب: -(250+20) * 6 صور أصلية = -1620px
+    */
     @keyframes scroll {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(calc(-250px * 5 - 100px)); /* تعديل الحساب بناء على عدد الصور */
-      }
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-270px * 6)); } 
     }
 
-    /* 4. معرض الصور الثابت (الشبكة) */
+    /* 3. معرض الصور الثابت */
     .gallery-title {
       border-bottom: 2px solid #ff9800;
       display: inline-block;
       padding-bottom: 5px;
       margin-bottom: 30px;
+      margin-top: 50px;
     }
 
     .gallery {
@@ -117,10 +120,10 @@
 
     .gallery img:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(255, 152, 0, 0.4); /* توهج برتقالي عند التحويم */
+      box-shadow: 0 10px 20px rgba(255, 152, 0, 0.4);
     }
 
-    /* 5. زر الواتساب */
+    /* 4. زر الواتساب */
     .whatsapp-btn {
       display: inline-flex;
       align-items: center;
@@ -132,7 +135,7 @@
       border-radius: 50px;
       font-size: 1.2rem;
       font-weight: bold;
-      margin: 40px auto 60px;
+      margin: 60px auto;
       box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
       transition: background 0.3s, transform 0.3s;
     }
@@ -142,12 +145,10 @@
       transform: scale(1.05);
     }
 
-    /* تأثير الظهور للنصوص */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
   </style>
 </head>
 
@@ -158,28 +159,35 @@
 
   <div class="slider-container">
     <div class="slider-track">
-      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="إعلان 1"></div>
-      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="إعلان 2"></div>
-      <div class="slide"><img src="https://via.placeholder.com/250x150/ff5722/fff?text=صورة+3" alt="إعلان 3"></div>
-      <div class="slide"><img src="https://via.placeholder.com/250x150/2196f3/fff?text=صورة+4" alt="إعلان 4"></div>
-      <div class="slide"><img src="https://via.placeholder.com/250x150/4caf50/fff?text=صورة+5" alt="إعلان 5"></div>
+      
+      <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
+      
+      <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
+      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="اعلان"></div>
 
-      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="إعلان 1"></div>
-      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="إعلان 2"></div>
-      <div class="slide"><img src="https://via.placeholder.com/250x150/ff5722/fff?text=صورة+3" alt="إعلان 3"></div>
-      <div class="slide"><img src="https://via.placeholder.com/250x150/2196f3/fff?text=صورة+4" alt="إعلان 4"></div>
-      <div class="slide"><img src="https://via.placeholder.com/250x150/4caf50/fff?text=صورة+5" alt="إعلان 5"></div>
+      <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
+      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="اعلان"></div>
+      
     </div>
   </div>
-
   <h2 class="gallery-title">أحدث الأعمال</h2>
-  <div class="gallery">
-    <img src="images/IMG_20260117_061812_292.webp" alt="عمل 1">
-    <img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="عمل 2">
-    <img src="https://via.placeholder.com/300x200/333/fff?text=Project+3" alt="عمل 3">
-    <img src="https://via.placeholder.com/300x200/444/fff?text=Project+4" alt="عمل 4">
-  </div>
 
+  <div class="gallery">
+    <img src="images/1767593909689.jpg" alt="اعلان">
+    <img src="images/1767218139132.jpg" alt="اعلان">
+    <img src="images/1767184659221.jpg" alt="اعلان">
+    
+    <img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان">
+    <img src="images/IMG_20260117_061812_292.webp" alt="اعلان">
+    <img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="اعلان">
+  </div>
   <a href="https://wsend.co/905424678123" class="whatsapp-btn" target="_blank">
     تواصل معنا عبر واتساب 💬
   </a>
