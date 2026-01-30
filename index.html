@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>معرضي الاحترافي</title>
+  <title>معرضي الاحترافي المحدث</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    /* 1. التنسيقات العامة */
     body {
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: #fff;
@@ -35,7 +34,7 @@
       font-size: 1.1rem;
     }
 
-    /* 2. شريط الصور المتحرك (Infinite Scroll Slider) */
+    /* شريط الصور المتحرك */
     .slider-container {
       background: rgba(255, 255, 255, 0.05);
       padding: 20px 0;
@@ -49,59 +48,43 @@
 
     .slider-track {
       display: flex;
-      gap: 20px; /* المسافة بين الصور */
-      /* الحساب: (عرض الصورة 250 + الفراغ 20) * (عدد الصور الكلي 12)
-         270 * 12 = 3240px تقريباً
-      */
-      width: calc(270px * 12); 
-      animation: scroll 20s linear infinite; /* حركة مستمرة */
+      gap: 20px;
+      /* تم تعديل العرض ليتناسب مع زيادة عدد الصور */
+      width: calc(300px * 16); 
+      animation: scroll 35s linear infinite;
     }
 
     .slide {
-      height: 150px;
-      width: 250px;
+      height: 180px;
+      width: 280px;
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 2px solid rgba(255,255,255,0.2);
-      transition: transform 0.3s;
-    }
-    
-    .slide img:hover {
-      transform: scale(1.05);
-      border-color: #fff;
+      transition: 0.3s;
     }
 
-    /* خدعة الحركة اللانهائية:
-       نحرك الشريط بمقدار نصف طوله (طول الصور الأصلية فقط)
-       عندما يصل للنهاية، يعود للصفر فوراً، وبما أن الصور مكررة، العين لا تلاحظ القفزة.
-       الحساب: -(250+20) * 6 صور أصلية = -1620px
-    */
     @keyframes scroll {
       0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-270px * 6)); } 
+      100% { transform: translateX(calc(-280px * 8 - 160px)); }
     }
 
-    /* 3. معرض الصور الثابت */
+    /* معرض الصور الثابت */
     .gallery-title {
       border-bottom: 2px solid #ff9800;
       display: inline-block;
       padding-bottom: 5px;
       margin-bottom: 30px;
-      margin-top: 50px;
     }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
       padding: 20px 50px;
       max-width: 1200px;
@@ -110,20 +93,18 @@
 
     .gallery img {
       width: 100%;
-      height: 200px;
+      height: 220px;
       object-fit: cover;
       border-radius: 15px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-      transition: all 0.3s ease;
-      cursor: pointer;
+      transition: 0.3s;
     }
 
     .gallery img:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(255, 152, 0, 0.4);
+      transform: scale(1.03);
+      box-shadow: 0 10px 20px rgba(255, 152, 0, 0.3);
     }
 
-    /* 4. زر الواتساب */
     .whatsapp-btn {
       display: inline-flex;
       align-items: center;
@@ -131,63 +112,51 @@
       background-color: #25D366;
       color: white;
       text-decoration: none;
-      padding: 15px 30px;
+      padding: 15px 35px;
       border-radius: 50px;
       font-size: 1.2rem;
       font-weight: bold;
-      margin: 60px auto;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-      transition: background 0.3s, transform 0.3s;
+      margin: 40px 0 60px;
+      transition: 0.3s;
     }
 
-    .whatsapp-btn:hover {
-      background-color: #128C7E;
-      transform: scale(1.05);
-    }
+    .whatsapp-btn:hover { background-color: #128C7E; transform: scale(1.05); }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   </style>
 </head>
 
 <body>
 
-  <h1>مرحباً بكم في موقعي</h1>
-  <p class="subtitle">نقدم لكم أفضل التصاميم والصور بجودة عالية</p>
+  <h1>مرحباً بكم في موقعي المحدث</h1>
+  <p class="subtitle">استعراض أحدث التصاميم المضافة</p>
 
   <div class="slider-container">
     <div class="slider-track">
+      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١٩٢٩١٣.jpg" alt="صورة 1"></div>
+      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="صورة 2"></div>
+      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="صورة 3"></div>
       
-      <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/Screenshot_١٩٥٣٣٥-٢٠٢٦٠١٣٠.jpg" alt="صورة جديدة 1"></div>
+      <div class="slide"><img src="images/Screenshot_٢٠٠١٥٠-٢٠٢٦٠١٣٠.jpg" alt="صورة جديدة 2"></div>
       
-      <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
-      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="اعلان"></div>
-
-      <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
-      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١٩٥٣٣٥.jpg" alt="اعلان"></div>
-      
+      <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١٩٢٩١٣.jpg" alt="صورة 1"></div>
+      <div class="slide"><img src="images/Screenshot_١٩٥٣٣٥-٢٠٢٦٠١٣٠.jpg" alt="صورة جديدة 1"></div>
+      <div class="slide"><img src="images/Screenshot_٢٠٠١٥٠-٢٠٢٦٠١٣٠.jpg" alt="صورة جديدة 2"></div>
     </div>
   </div>
-  <h2 class="gallery-title">أحدث الأعمال</h2>
 
+  <h2 class="gallery-title">المعرض الكامل</h2>
+  
   <div class="gallery">
-    <img src="images/1767593909689.jpg" alt="اعلان">
-    <img src="images/1767218139132.jpg" alt="اعلان">
-    <img src="images/1767184659221.jpg" alt="اعلان">
+    <img src="images/Screenshot_٢٠٢٦٠١٣٠-١٩٢٩١٣.jpg" alt="صورة 1">
+    <img src="images/IMG_20260117_061812_292.webp" alt="صورة 2">
+    <img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="صورة 3">
     
-    <img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان">
-    <img src="images/IMG_20260117_061812_292.webp" alt="اعلان">
-    <img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="اعلان">
+    <img src="images/Screenshot_١٩٥٣٣٥-٢٠٢٦٠١٣٠.jpg" alt="صورة جديدة 1">
+    <img src="images/Screenshot_٢٠٠١٥٠-٢٠٢٦٠١٣٠.jpg" alt="صورة جديدة 2">
   </div>
+
   <a href="https://wsend.co/905424678123" class="whatsapp-btn" target="_blank">
     تواصل معنا عبر واتساب 💬
   </a>
