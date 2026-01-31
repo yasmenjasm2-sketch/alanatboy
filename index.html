@@ -50,11 +50,16 @@
     .slider-track {
       display: flex;
       gap: 20px; /* المسافة بين الصور */
-      /* تم تحديث الحساب ليتناسب مع 8 صور أصلية مكررة (المجموع 16 صورة)
-         (270 * 16) = 4320px تقريباً
+      /* الحساب الدقيق للحركة:
+         عرض الصورة (250) + الفراغ (20) = 270 بكسل
+         عدد الصور الكلي (الأصلية + المكررة) = 12 صورة
+         العرض الكلي = 270 * 12 = 3240px
       */
-      width: calc(270px * 16); 
-      animation: scroll 25s linear infinite; /* تعديل طفيف للسرعة لتناسب العدد الجديد */
+      width: calc(270px * 12); 
+      animation: scroll 20s linear infinite;
+      
+      /* مهم جداً: جعل اتجاه الشريط من اليسار لليمين لضمان عمل الحركة بشكل صحيح في المواقع العربية */
+      direction: ltr; 
     }
 
     .slide {
@@ -80,12 +85,13 @@
       border-color: #fff;
     }
 
-    /* تحديث حركة الانيميشن بناءً على العدد الجديد (8 صور أصلية)
-       100% { transform: translateX(calc(-270px * 8)); }
+    /* حركة الشريط:
+       يتحرك بمقدار عرض الـ 6 صور الأصلية فقط (-1620px)
+       وعندما يصل للنهاية يعود للصفر فوراً، وبما أن الصور مكررة فلا تلاحظ العين ذلك.
     */
     @keyframes scroll {
       0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-270px * 8)); } 
+      100% { transform: translateX(calc(-270px * 6)); } 
     }
 
     /* 3. معرض الصور الثابت */
@@ -161,13 +167,9 @@
       <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
-      
       <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
       <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="اعلان"></div>
-
-      <div class="slide"><img src="images/Screenshot_195335-20260130.jpg" alt="اعلان جديد"></div>
-      <div class="slide"><img src="images/Screenshot_200150-20260130.jpg" alt="اعلان جديد"></div>
 
       <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
@@ -176,25 +178,20 @@
       <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
       <div class="slide"><img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="اعلان"></div>
       
-      <div class="slide"><img src="images/Screenshot_195335-20260130.jpg" alt="اعلان جديد"></div>
-      <div class="slide"><img src="images/Screenshot_200150-20260130.jpg" alt="اعلان جديد"></div>
-      
     </div>
   </div>
+
   <h2 class="gallery-title">أحدث اعمالنا في تطبيقنا</h2>
 
   <div class="gallery">
     <img src="images/1767593909689.jpg" alt="اعلان">
     <img src="images/1767218139132.jpg" alt="اعلان">
     <img src="images/1767184659221.jpg" alt="اعلان">
-    
     <img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان">
     <img src="images/IMG_20260117_061812_292.webp" alt="اعلان">
-    <img src="images/1769830307172.png" alt=اعلان">
-
-    <img src="images/Screenshot_195335-20260130.jpg" alt="اعلان جديد">
-    <img src="images/Screenshot_200150-20260130.jpg" alt="اعلان جديد">
+    <img src="images/Screenshot_٢٠٢٦٠١٣٠-١١١٠١١.jpg" alt="اعلان">
   </div>
+  
   <a href="https://wsend.co/905424678123" class="whatsapp-btn" target="_blank">
     تواصل معنا عبر واتساب 💬
   </a>
