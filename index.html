@@ -1,200 +1,621 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>fawakihAIاعلانات</title>
+  <title>fawakihAI | الإعلانات</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
   <style>
+    /* المتغيرات العامة */
+    :root {
+      --primary-color: #ff9800;
+      --secondary-color: #25D366;
+      --dark-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      --card-bg: rgba(255, 255, 255, 0.1);
+      --shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
     /* 1. التنسيقات العامة */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: var(--dark-gradient);
       color: #fff;
       text-align: center;
       font-family: 'Tajawal', sans-serif;
-      margin: 0;
-      padding: 0;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
 
-    h1 {
-      margin: 40px 0 10px;
-      font-size: 2.5rem;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-      animation: fadeIn 2s ease-in-out;
-    }
-    
-    p.subtitle {
-      color: #ccc;
-      margin-bottom: 40px;
-      font-size: 1.1rem;
+    /* تأثير الجسيمات المتحركة في الخلفية */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(255, 152, 0, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(37, 211, 102, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
 
-    /* 2. شريط الصور المتحرك (Infinite Scroll Slider) */
+    /* حاوية رئيسية مع تأثير الظهور */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      opacity: 0;
+      animation: fadeInUp 1.5s ease-out forwards;
+    }
+
+    /* تأثيرات الظهور للعناصر */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* تنسيق الهيدر مع تأثير متحرك */
+    .header {
+      position: relative;
+      padding: 60px 20px 40px;
+      margin-bottom: 30px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .header h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #fff, #ff9800, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(255, 152, 0, 0.3);
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+      animation: scaleIn 1.2s ease-out;
+    }
+
+    .header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #ff9800, #25D366, transparent);
+      border-radius: 2px;
+    }
+
+    .header .subtitle {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.3rem;
+      font-weight: 500;
+      animation: fadeInLeft 1.3s ease-out;
+    }
+
+    /* شريط الصور المتحرك المحسن */
     .slider-container {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px 0;
-      margin: 30px 0;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 30px 0;
+      margin: 40px 0;
       overflow: hidden;
       position: relative;
       width: 100%;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: fadeInRight 1.4s ease-out;
+    }
+
+    .slider-container::before,
+    .slider-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 150px;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .slider-container::before {
+      left: 0;
+      background: linear-gradient(90deg, rgba(15,32,39,0.8), transparent);
+    }
+
+    .slider-container::after {
+      right: 0;
+      background: linear-gradient(-90deg, rgba(15,32,39,0.8), transparent);
     }
 
     .slider-track {
       display: flex;
-      gap: 20px; /* المسافة بين الصور */
-      /* الحساب الدقيق للحركة:
-         عرض الصورة (250) + الفراغ (20) = 270 بكسل
-         عدد الصور الكلي (الأصلية + المكررة) = 12 صورة
-         العرض الكلي = 270 * 12 = 3240px
-      */
-      width: calc(270px * 12); 
-      animation: scroll 20s linear infinite;
-      
-      /* مهم جداً: جعل اتجاه الشريط من اليسار لليمين لضمان عمل الحركة بشكل صحيح في المواقع العربية */
-      direction: ltr; 
+      gap: 25px;
+      width: fit-content;
+      animation: scroll 30s linear infinite;
+      direction: ltr;
+      padding: 0 20px;
+    }
+
+    .slider-track:hover {
+      animation-play-state: paused;
     }
 
     .slide {
-      height: 150px;
-      width: 250px;
+      height: 180px;
+      width: 280px;
       flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .slide:hover::before {
+      transform: translateX(100%);
     }
 
     .slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 10px;
-      border: 2px solid rgba(255,255,255,0.2);
-      transition: transform 0.3s;
-    }
-    
-    .slide img:hover {
-      transform: scale(1.05);
-      border-color: #fff;
+      transition: transform 0.5s;
     }
 
-    /* حركة الشريط:
-       يتحرك بمقدار عرض الـ 6 صور الأصلية فقط (-1620px)
-       وعندما يصل للنهاية يعود للصفر فوراً، وبما أن الصور مكررة فلا تلاحظ العين ذلك.
-    */
+    .slide:hover img {
+      transform: scale(1.15);
+    }
+
+    .slide::after {
+      content: '🔝 عرض خاص';
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      width: 100%;
+      background: linear-gradient(45deg, #ff9800, #f44336);
+      color: white;
+      text-align: center;
+      padding: 8px 0;
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: bottom 0.3s;
+    }
+
+    .slide:hover::after {
+      bottom: 0;
+    }
+
     @keyframes scroll {
       0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-270px * 6)); } 
+      100% { transform: translateX(calc(-305px * 6)); }
     }
 
-    /* 3. معرض الصور الثابت */
+    /* معرض الصور المحسن مع تأثيرات الظهور */
+    .gallery-section {
+      margin: 60px 0 40px;
+      animation: fadeInLeft 1.5s ease-out;
+    }
+
     .gallery-title {
-      border-bottom: 2px solid #ff9800;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 40px;
       display: inline-block;
-      padding-bottom: 5px;
-      margin-bottom: 30px;
-      margin-top: 50px;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .gallery-title::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #ff9800, #25D366, transparent);
+      border-radius: 3px;
     }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px 50px;
-      max-width: 1200px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 20px 40px;
+      max-width: 1300px;
       margin: 0 auto;
     }
 
-    .gallery img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-      transition: all 0.3s ease;
+    .gallery-item {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease-out forwards;
       cursor: pointer;
+      transition: all 0.4s;
     }
 
-    .gallery img:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(255, 152, 0, 0.4);
+    /* تأخير ظهور كل عنصر */
+    .gallery-item:nth-child(1) { animation-delay: 0.2s; }
+    .gallery-item:nth-child(2) { animation-delay: 0.4s; }
+    .gallery-item:nth-child(3) { animation-delay: 0.6s; }
+    .gallery-item:nth-child(4) { animation-delay: 0.8s; }
+    .gallery-item:nth-child(5) { animation-delay: 1.0s; }
+    .gallery-item:nth-child(6) { animation-delay: 1.2s; }
+
+    .gallery-item:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(255, 152, 0, 0.4);
     }
 
-    /* 4. زر الواتساب */
+    .gallery-item img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: transform 0.6s;
+      display: block;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      color: white;
+      padding: 20px;
+      transform: translateY(100%);
+      transition: transform 0.4s;
+      text-align: right;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      transform: translateY(0);
+    }
+
+    .gallery-overlay h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+      color: #ff9800;
+    }
+
+    .gallery-overlay p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    /* زر الواتساب المحسن */
+    .whatsapp-wrapper {
+      margin: 70px auto 50px;
+      opacity: 0;
+      animation: scaleIn 1.2s ease-out 1.4s forwards;
+    }
+
     .whatsapp-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background-color: #25D366;
+      gap: 15px;
+      background: linear-gradient(45deg, #25D366, #128C7E);
       color: white;
       text-decoration: none;
-      padding: 15px 30px;
-      border-radius: 50px;
-      font-size: 1.2rem;
+      padding: 18px 45px;
+      border-radius: 60px;
+      font-size: 1.4rem;
       font-weight: bold;
-      margin: 60px auto;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-      transition: background 0.3s, transform 0.3s;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .whatsapp-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .whatsapp-btn:hover::before {
+      width: 300px;
+      height: 300px;
     }
 
     .whatsapp-btn:hover {
-      background-color: #128C7E;
-      transform: scale(1.05);
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 15px 35px rgba(37, 211, 102, 0.6);
+      border-color: #fff;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .whatsapp-btn i {
+      font-size: 1.8rem;
+      transition: transform 0.4s;
+    }
+
+    .whatsapp-btn:hover i {
+      transform: rotate(15deg) scale(1.2);
+    }
+
+    /* مؤشر التمرير */
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #ff9800, #25D366, #ff9800);
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.1s;
+      box-shadow: 0 0 20px #ff9800;
+    }
+
+    /* تذييل الصفحة */
+    .footer {
+      margin-top: 80px;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+    }
+
+    /* تحسينات للأجهزة المحمولة */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.5rem;
+      }
+      
+      .gallery {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        padding: 10px;
+      }
+      
+      .slide {
+        height: 150px;
+        width: 250px;
+      }
+      
+      .whatsapp-btn {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+      }
+    }
+
+    /* تأثيرات إضافية */
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .glow {
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 20px rgba(255, 152, 0, 0.5); }
+      50% { text-shadow: 0 0 40px rgba(255, 152, 0, 0.8); }
     }
   </style>
 </head>
-
 <body>
 
-  <h1>hamza EL hummada</h1>
-  <p class="subtitle">تحديثات</p>
+  <!-- مؤشر التمرير -->
+  <div class="scroll-indicator" id="scrollIndicator"></div>
 
-  <div class="slider-container">
-    <div class="slider-track">
-      
-      <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
-      <div class="slide"><img src="images/1769838671987.jpg" alt="اعلان"></div>
-
-      <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/1769838671987.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
-      <div class="slide"><img src="images/1769830307172.png" alt="اعلان"></div>
-      
+  <div class="container">
+    
+    <!-- الهيدر مع التأثيرات -->
+    <div class="header">
+      <h1 class="glow">hamza EL hummada</h1>
+      <p class="subtitle">تحديثات حصرية • عروض مميزة • تخفيضات</p>
     </div>
+
+    <!-- شريط الصور المتحرك المحسن -->
+    <div class="slider-container">
+      <div class="slider-track">
+        <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
+        <div class="slide"><img src="images/1769838671987.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/1769838671987.jpg" alt="اعلان"></div>
+        <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
+        <div class="slide"><img src="images/1769830307172.png" alt="اعلان"></div>
+      </div>
+    </div>
+
+    <!-- معرض الصور المحسن مع تأثيرات التدريج -->
+    <div class="gallery-section">
+      <h2 class="gallery-title">أحدث أعمالنا في تطبيقنا</h2>
+
+      <div class="gallery">
+        <div class="gallery-item">
+          <img src="images/1767593909689.jpg" alt="اعلان">
+          <div class="gallery-overlay">
+            <h3>عرض خاص</h3>
+            <p>تخفيض 30% لفترة محدودة</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item">
+          <img src="images/1767218139132.jpg" alt="اعلان">
+          <div class="gallery-overlay">
+            <h3>منتج جديد</h3>
+            <p>أحدث الإصدارات لعام 2026</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item">
+          <img src="images/1767184659221.jpg" alt="اعلان">
+          <div class="gallery-overlay">
+            <h3>خدمة مميزة</h3>
+            <p>احصل على استشارة مجانية</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item">
+          <img src="images/1769838671987.jpg" alt="اعلان">
+          <div class="gallery-overlay">
+            <h3>عرض حصري</h3>
+            <p>للمشتركين الجدد فقط</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item">
+          <img src="images/IMG_20260117_061812_292.webp" alt="اعلان">
+          <div class="gallery-overlay">
+            <h3>شحن سريع</h3>
+            <p>توصيل مجاني للطلبات</p>
+          </div>
+        </div>
+        
+        <div class="gallery-item">
+          <img src="images/1769830307172.png" alt="اعلان">
+          <div class="gallery-overlay">
+            <h3>تقسيط ميسر</h3>
+            <p>بدون فوائد حتى 12 شهر</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- زر الواتساب المحسن -->
+    <div class="whatsapp-wrapper">
+      <a href="https://wsend.co/905424678123" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+        تواصل معنا عبر واتساب
+        <i class="fas fa-arrow-left"></i>
+      </a>
+    </div>
+
+    <!-- تذييل الصفحة -->
+    <div class="footer">
+      <p>© 2026 fawakihAI - جميع الحقوق محفوظة</p>
+    </div>
+
   </div>
 
-  <h2 class="gallery-title">أحدث اعمالنا في تطبيقنا</h2>
+  <!-- سكربت مؤشر التمرير -->
+  <script>
+    // تحديث مؤشر التمرير
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('scrollIndicator').style.width = scrolled + '%';
+    });
 
-  <div class="gallery">
-    <img src="images/1767593909689.jpg" alt="اعلان">
-    <img src="images/1767218139132.jpg" alt="اعلان">
-    <img src="images/1767184659221.jpg" alt="اعلان">
-    <img src="images/1769838671987.jpg" alt="اعلان">
-    <img src="images/IMG_20260117_061812_292.webp" alt="اعلان">
-    <img src="images/1769830307172.png" alt="اعلان">
-  </div>
-  
-  <a href="https://wsend.co/905424678123" class="whatsapp-btn" target="_blank">
-    تواصل معنا عبر واتساب 💬
-  </a>
+    // تأثير ظهور متدرج للعناصر عند التمرير
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // مراقبة عناصر المعرض
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      observer.observe(item);
+    });
+  </script>
 
 </body>
 </html>
