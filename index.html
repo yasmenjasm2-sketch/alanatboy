@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -50,12 +50,15 @@
     .slider-track {
       display: flex;
       gap: 20px; /* المسافة بين الصور */
-      /* عرض الصورة (250) + الفراغ (20) = 270 بكسل */
-      /* لدينا 4 صور أصلية وسنكررها مرة واحدة ليصبح المجموع 8 صور */
-      width: calc(270px * 8);
-      animation: scroll 15s linear infinite;
+      /* الحساب الدقيق للحركة:
+         عرض الصورة (250) + الفراغ (20) = 270 بكسل
+         عدد الصور الكلي (الأصلية + المكررة) = 12 صورة
+         العرض الكلي = 270 * 12 = 3240px
+      */
+      width: calc(270px * 12); 
+      animation: scroll 20s linear infinite;
       
-      /* اتجاه الشريط من اليسار لليمين */
+      /* مهم جداً: جعل اتجاه الشريط من اليسار لليمين لضمان عمل الحركة بشكل صحيح في المواقع العربية */
       direction: ltr; 
     }
 
@@ -83,12 +86,12 @@
     }
 
     /* حركة الشريط:
-       يتحرك بمقدار عرض الـ 4 صور الأصلية فقط (-1080px)
-       وعندما يصل للنهاية يعود للصفر فوراً.
+       يتحرك بمقدار عرض الـ 6 صور الأصلية فقط (-1620px)
+       وعندما يصل للنهاية يعود للصفر فوراً، وبما أن الصور مكررة فلا تلاحظ العين ذلك.
     */
     @keyframes scroll {
       0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-270px * 4)); } 
+      100% { transform: translateX(calc(-270px * 6)); } 
     }
 
     /* 3. معرض الصور الثابت */
@@ -161,16 +164,19 @@
   <div class="slider-container">
     <div class="slider-track">
       
-      <!-- نكرر الـ 4 صور المطلوبة مرتين لإنشاء حركة لا نهائية سلسة -->
       <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
-      
+      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
+      <div class="slide"><img src="images/1769838671987.jpg" alt="اعلان"></div>
+
       <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
       <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
-      <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/1769838671987.jpg" alt="اعلان"></div>
+      <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
+      <div class="slide"><img src="images/1769830307172.png" alt="اعلان"></div>
       
     </div>
   </div>
