@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>fawakihAI | الإعلانات</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,6 +49,17 @@
                   radial-gradient(circle at 80% 80%, rgba(37, 211, 102, 0.1) 0%, transparent 50%);
       pointer-events: none;
       z-index: -1;
+    }
+
+    /* منع التحديد واللمس */
+    .no-touch {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* حاوية رئيسية مع تأثير الظهور */
@@ -202,7 +213,8 @@
       overflow: hidden;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      cursor: pointer;
+      cursor: default;
+      pointer-events: none; /* منع التفاعل مع الصور */
     }
 
     .slide::before {
@@ -299,7 +311,8 @@
       opacity: 0;
       transform: translateY(30px);
       animation: fadeInUp 0.8s ease-out forwards;
-      cursor: pointer;
+      cursor: default;
+      pointer-events: none; /* منع التفاعل مع المعرض */
       transition: all 0.4s;
     }
 
@@ -380,6 +393,8 @@
       border: 2px solid rgba(255, 255, 255, 0.2);
       position: relative;
       overflow: hidden;
+      pointer-events: none; /* منع التفاعل مع الزر */
+      cursor: default;
     }
 
     .whatsapp-btn::before {
@@ -426,6 +441,7 @@
       z-index: 1000;
       transition: width 0.1s;
       box-shadow: 0 0 20px #ff9800;
+      pointer-events: none;
     }
 
     /* تذييل الصفحة */
@@ -483,62 +499,23 @@
       50% { text-shadow: 0 0 40px rgba(255, 152, 0, 0.8); }
     }
 
-    /* أزرار التحكم في التمرير التلقائي */
-    .auto-scroll-controls {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .scroll-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff9800, #f44336);
-      border: none;
-      color: white;
-      font-size: 1.2rem;
-      cursor: pointer;
-      box-shadow: 0 5px 20px rgba(255, 152, 0, 0.5);
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .scroll-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 25px rgba(255, 152, 0, 0.8);
-    }
-
-    .scroll-btn.pause {
-      background: linear-gradient(135deg, #f44336, #d32f2f);
-    }
-
-    .scroll-btn i {
-      font-size: 1.2rem;
-    }
-
     /* رسالة التمرير التلقائي */
     .auto-scroll-message {
       position: fixed;
-      bottom: 100px;
+      bottom: 30px;
       right: 30px;
       background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(5px);
       color: white;
-      padding: 10px 20px;
+      padding: 12px 25px;
       border-radius: 50px;
-      font-size: 0.9rem;
-      border: 1px solid #ff9800;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      z-index: 998;
+      font-size: 1rem;
+      border: 2px solid #ff9800;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      z-index: 999;
       transform: translateX(150%);
       transition: transform 0.3s;
+      pointer-events: none;
     }
 
     .auto-scroll-message.show {
@@ -547,29 +524,35 @@
 
     .auto-scroll-message i {
       color: #ff9800;
-      margin-left: 8px;
+      margin-left: 10px;
+      font-size: 1.2rem;
+    }
+
+    /* طبقة شفافة لمنع أي تفاعل */
+    .touch-blocker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 9998;
+      pointer-events: none; /* نسمح بمرور الأحداث للتمرير */
     }
   </style>
 </head>
-<body>
+<body class="no-touch">
+
+  <!-- طبقة حماية إضافية (اختيارية) -->
+  <div class="touch-blocker"></div>
 
   <!-- مؤشر التمرير -->
   <div class="scroll-indicator" id="scrollIndicator"></div>
 
-  <!-- أزرار التحكم في التمرير التلقائي -->
-  <div class="auto-scroll-controls">
-    <button class="scroll-btn" id="toggleScroll" title="إيقاف/تشغيل التمرير التلقائي">
-      <i class="fas fa-pause" id="scrollIcon"></i>
-    </button>
-    <button class="scroll-btn" id="resetScroll" title="العودة للأعلى">
-      <i class="fas fa-arrow-up"></i>
-    </button>
-  </div>
-
   <!-- رسالة التمرير التلقائي -->
   <div class="auto-scroll-message" id="scrollMessage">
-    <i class="fas fa-info-circle"></i>
-    <span id="messageText">التمرير التلقائي نشط</span>
+    <i class="fas fa-arrows-alt-v"></i>
+    <span id="messageText">تمرير تلقائي</span>
   </div>
 
   <div class="container">
@@ -700,44 +683,33 @@
     });
 
     // =============================================
-    // 🟢 نظام التمرير التلقائي الذكي
+    // 🟢 نظام التمرير التلقائي الذكي (بدون أزرار)
     // =============================================
     
     // متغيرات التمرير التلقائي
-    let autoScrollEnabled = true;
     let scrollInterval;
     let messageTimeout;
+    let isScrolling = true;
+    let userInteracted = false;
     
-    // سرعة التمرير (بكسل لكل 50 ملي ثانية)
-    const SCROLL_SPEED = 2;
-    const SCROLL_INTERVAL = 50;
+    // سرعة التمرير (بكسل لكل 30 ملي ثانية) - أبطأ قليلاً للقراءة
+    const SCROLL_SPEED = 1.5;
+    const SCROLL_INTERVAL = 30;
     
     // عناصر التحكم
-    const toggleBtn = document.getElementById('toggleScroll');
-    const resetBtn = document.getElementById('resetScroll');
-    const scrollIcon = document.getElementById('scrollIcon');
     const scrollMessage = document.getElementById('scrollMessage');
     const messageText = document.getElementById('messageText');
     
     // دالة إظهار الرسالة
-    function showMessage(text, isPaused = false) {
+    function showMessage(text) {
       messageText.textContent = text;
       scrollMessage.classList.add('show');
       
-      // تغيير لون الرسالة حسب الحالة
-      if (isPaused) {
-        scrollMessage.style.borderColor = '#f44336';
-        scrollMessage.querySelector('i').style.color = '#f44336';
-      } else {
-        scrollMessage.style.borderColor = '#ff9800';
-        scrollMessage.querySelector('i').style.color = '#ff9800';
-      }
-      
-      // إخفاء الرسالة بعد 3 ثواني
+      // إخفاء الرسالة بعد 2 ثانية
       clearTimeout(messageTimeout);
       messageTimeout = setTimeout(() => {
         scrollMessage.classList.remove('show');
-      }, 3000);
+      }, 2000);
     }
     
     // دالة بدء التمرير التلقائي
@@ -745,7 +717,7 @@
       if (scrollInterval) clearInterval(scrollInterval);
       
       scrollInterval = setInterval(() => {
-        if (autoScrollEnabled) {
+        if (isScrolling) {
           // التمرير التدريجي للأسفل
           window.scrollBy({
             top: SCROLL_SPEED,
@@ -753,103 +725,98 @@
           });
           
           // التحقق إذا وصلنا إلى نهاية الصفحة
-          if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+          if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
             // العودة للأعلى بسلاسة
             setTimeout(() => {
               window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
               });
-            }, 500);
+              // إظهار رسالة إعادة التشغيل
+              showMessage('جاري إعادة التشغيل');
+            }, 100);
           }
         }
       }, SCROLL_INTERVAL);
     }
     
-    // دالة إيقاف التمرير التلقائي
-    function stopAutoScroll() {
-      if (scrollInterval) {
-        clearInterval(scrollInterval);
-        scrollInterval = null;
-      }
-    }
-    
-    // toggle التمرير التلقائي
-    function toggleAutoScroll() {
-      autoScrollEnabled = !autoScrollEnabled;
-      
-      if (autoScrollEnabled) {
-        startAutoScroll();
-        scrollIcon.className = 'fas fa-pause';
-        showMessage('التمرير التلقائي نشط', false);
-      } else {
-        stopAutoScroll();
-        scrollIcon.className = 'fas fa-play';
-        showMessage('التمرير التلقائي متوقف', true);
-      }
-    }
-    
-    // العودة للأعلى
-    function scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-      
-      // إظهار رسالة
-      showMessage('تم العودة للأعلى', false);
-      
-      // التأكد من استمرار التمرير التلقائي إذا كان نشطاً
-      if (!autoScrollEnabled) {
-        autoScrollEnabled = true;
-        startAutoScroll();
-        scrollIcon.className = 'fas fa-pause';
-      }
-    }
-    
-    // إيقاف التمرير التلقائي مؤقتاً عند تفاعل المستخدم
-    function pauseOnUserInteraction() {
-      if (autoScrollEnabled) {
-        // إيقاف التمرير التلقائي لمدة 3 ثواني
-        stopAutoScroll();
+    // دالة إيقاف التمرير التلقائي مؤقتاً
+    function pauseAutoScroll() {
+      if (isScrolling) {
+        isScrolling = false;
+        showMessage('تم إيقاف التمرير مؤقتاً');
         
-        // إظهار رسالة
-        showMessage('تم إيقاف التمرير مؤقتاً', true);
-        
-        // إعادة التشغيل بعد 3 ثواني
+        // إعادة التشغيل بعد 2 ثانية
         setTimeout(() => {
-          if (autoScrollEnabled) {
-            startAutoScroll();
-            showMessage('التمرير التلقائي نشط', false);
-          }
-        }, 3000);
+          isScrolling = true;
+          showMessage('استئناف التمرير');
+        }, 2000);
       }
     }
     
-    // أحداث المستخدم
-    window.addEventListener('wheel', pauseOnUserInteraction);
-    window.addEventListener('touchmove', pauseOnUserInteraction);
+    // =============================================
+    // 🟢 منع التمرير اليدوي تماماً
+    // =============================================
+    
+    // منع أحداث التمرير اليدوي (العجلة)
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      pauseAutoScroll();
+      return false;
+    }, { passive: false });
+    
+    // منع أحداث اللمس للتمرير (على المحمول)
+    window.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      pauseAutoScroll();
+      return false;
+    }, { passive: false });
+    
+    // منع مفاتيح الأسهم و PageUp/PageDown
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'PageDown' || e.key === 'PageUp') {
-        pauseOnUserInteraction();
+      const keys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', ' ', 'Home', 'End'];
+      if (keys.includes(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
+        pauseAutoScroll();
+        return false;
       }
     });
     
-    // أحداث الأزرار
-    toggleBtn.addEventListener('click', toggleAutoScroll);
-    resetBtn.addEventListener('click', scrollToTop);
+    // منع السحب (drag)
+    document.addEventListener('drag', (e) => {
+      e.preventDefault();
+    });
+    
+    document.addEventListener('dragstart', (e) => {
+      e.preventDefault();
+    });
+    
+    // منع التحديد
+    document.addEventListener('selectstart', (e) => {
+      e.preventDefault();
+    });
+    
+    // =============================================
+    // 🟢 بدء التمرير التلقائي
+    // =============================================
     
     // بدء التمرير التلقائي عند تحميل الصفحة
     window.addEventListener('load', () => {
       setTimeout(() => {
         startAutoScroll();
-        showMessage('التمرير التلقائي نشط', false);
-      }, 2000); // تأخير 2 ثانية قبل بدء التمرير
+        showMessage('بدء العرض التلقائي');
+      }, 1000); // تأخير ثانية واحدة قبل بدء التمرير
     });
     
     // تنظيف عند مغادرة الصفحة
     window.addEventListener('beforeunload', () => {
-      stopAutoScroll();
+      if (scrollInterval) {
+        clearInterval(scrollInterval);
+        scrollInterval = null;
+      }
     });
     
   </script>
