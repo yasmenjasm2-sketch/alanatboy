@@ -2,823 +2,206 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>fawakihAI | الإعلانات</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>أعمالنا</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&display=swap" rel="stylesheet">
 
   <style>
-    /* المتغيرات العامة */
-    :root {
-      --primary-color: #ff9800;
-      --secondary-color: #25D366;
-      --dark-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      --card-bg: rgba(255, 255, 255, 0.1);
-      --shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    }
-
-    /* 1. التنسيقات العامة */
+    /* 1. التنسيقات العامة ومنع التفاعل */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      /* منع تحديد النصوص والصور */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     body {
-      background: var(--dark-gradient);
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       color: #fff;
-      text-align: center;
       font-family: 'Tajawal', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
+      height: 100vh;
+      overflow: hidden; /* إخفاء أشرطة التمرير تماماً */
       position: relative;
+      touch-action: none; /* منع إيماءات اللمس */
     }
 
-    /* تأثير الجسيمات المتحركة في الخلفية */
-    body::before {
-      content: '';
+    /* طبقة الحماية المخفية - تمنع أي لمس أو نقر على الشاشة */
+    .touch-shield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      background: transparent;
+      cursor: default;
+    }
+
+    /* 2. عنوان الصفحة المضيء */
+    .title-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 20% 50%, rgba(255, 152, 0, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 80%, rgba(37, 211, 102, 0.1) 0%, transparent 50%);
+      text-align: center;
+      padding: 25px 0;
+      background: linear-gradient(to bottom, rgba(15,32,39,1) 0%, rgba(15,32,39,0) 100%);
+      z-index: 1000;
       pointer-events: none;
-      z-index: -1;
     }
 
-    /* منع التحديد واللمس */
-    .no-touch {
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -khtml-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* حاوية رئيسية مع تأثير الظهور */
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
-      opacity: 0;
-      animation: fadeInUp 1.5s ease-out forwards;
-    }
-
-    /* تأثيرات الظهور للعناصر */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(50px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeInLeft {
-      from {
-        opacity: 0;
-        transform: translateX(50px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes fadeInRight {
-      from {
-        opacity: 0;
-        transform: translateX(-50px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes scaleIn {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    /* تنسيق الهيدر مع تأثير متحرك */
-    .header {
-      position: relative;
-      padding: 60px 20px 40px;
-      margin-bottom: 30px;
-      animation: fadeInUp 1s ease-out;
-    }
-
-    .header h1 {
-      font-size: 4rem;
+    .main-title {
+      font-size: 3.5rem;
       font-weight: 900;
       background: linear-gradient(45deg, #fff, #ff9800, #fff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(255, 152, 0, 0.3);
-      margin-bottom: 15px;
-      position: relative;
-      display: inline-block;
-      animation: scaleIn 1.2s ease-out;
+      text-shadow: 0 5px 20px rgba(255, 152, 0, 0.4);
+      letter-spacing: 2px;
+      animation: pulseGlow 3s infinite alternate;
     }
 
-    .header h1::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 4px;
-      background: linear-gradient(90deg, transparent, #ff9800, #25D366, transparent);
-      border-radius: 2px;
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 5px 20px rgba(255, 152, 0, 0.4); transform: scale(1); }
+      100% { text-shadow: 0 5px 40px rgba(255, 152, 0, 0.8); transform: scale(1.02); }
     }
 
-    .header .subtitle {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 1.3rem;
-      font-weight: 500;
-      animation: fadeInLeft 1.3s ease-out;
-    }
-
-    /* شريط الصور المتحرك المحسن */
-    .slider-container {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
-      padding: 30px 0;
-      margin: 40px 0;
-      overflow: hidden;
-      position: relative;
-      width: 100%;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      animation: fadeInRight 1.4s ease-out;
-    }
-
-    .slider-container::before,
-    .slider-container::after {
-      content: '';
+    /* 3. حاوية العرض المتحركة (من الأسفل للأعلى) */
+    .gallery-viewport {
       position: absolute;
       top: 0;
-      width: 150px;
-      height: 100%;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .slider-container::before {
       left: 0;
-      background: linear-gradient(90deg, rgba(15,32,39,0.8), transparent);
-    }
-
-    .slider-container::after {
-      right: 0;
-      background: linear-gradient(-90deg, rgba(15,32,39,0.8), transparent);
-    }
-
-    .slider-track {
+      width: 100%;
+      height: 100vh;
       display: flex;
-      gap: 25px;
-      width: fit-content;
-      animation: scroll 30s linear infinite;
-      direction: ltr;
-      padding: 0 20px;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 120px; /* مسافة للعنوان */
+      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
     }
 
-    .slider-track:hover {
-      animation-play-state: paused;
-    }
-
-    .slide {
-      height: 180px;
-      width: 280px;
-      flex-shrink: 0;
-      position: relative;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      cursor: default;
-      pointer-events: none; /* منع التفاعل مع الصور */
-    }
-
-    .slide::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transform: translateX(-100%);
-      transition: transform 0.6s;
-    }
-
-    .slide:hover::before {
-      transform: translateX(100%);
-    }
-
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s;
-    }
-
-    .slide:hover img {
-      transform: scale(1.15);
-    }
-
-    .slide::after {
-      content: '🔝 عرض خاص';
-      position: absolute;
-      bottom: -40px;
-      left: 0;
-      width: 100%;
-      background: linear-gradient(45deg, #ff9800, #f44336);
-      color: white;
-      text-align: center;
-      padding: 8px 0;
-      font-size: 0.9rem;
-      font-weight: bold;
-      transition: bottom 0.3s;
-    }
-
-    .slide:hover::after {
-      bottom: 0;
-    }
-
-    @keyframes scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-305px * 6)); }
-    }
-
-    /* معرض الصور المحسن مع تأثيرات الظهور */
-    .gallery-section {
-      margin: 60px 0 40px;
-      animation: fadeInLeft 1.5s ease-out;
-    }
-
-    .gallery-title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 40px;
-      display: inline-block;
-      position: relative;
-      padding-bottom: 15px;
-    }
-
-    .gallery-title::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, #ff9800, #25D366, transparent);
-      border-radius: 3px;
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    .scrolling-track {
+      display: flex;
+      flex-direction: column;
       gap: 30px;
-      padding: 20px 40px;
-      max-width: 1300px;
-      margin: 0 auto;
+      width: 90%;
+      max-width: 800px;
+      /* حركة لا نهائية سلسة - يمكنك تعديل 40s لتسريع أو إبطاء الحركة */
+      animation: scrollUpBottom 40s linear infinite;
     }
 
-    .gallery-item {
-      position: relative;
+    @keyframes scrollUpBottom {
+      0% { transform: translateY(0); }
+      /* يتحرك بنسبة 50% لأننا سنقوم بنسخ الصور بالبرمجة ليصبح الطول الضعف */
+      100% { transform: translateY(-50%); } 
+    }
+
+    /* تنسيق الصور */
+    .image-card {
+      width: 100%;
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: var(--shadow);
-      opacity: 0;
-      transform: translateY(30px);
-      animation: fadeInUp 0.8s ease-out forwards;
-      cursor: default;
-      pointer-events: none; /* منع التفاعل مع المعرض */
-      transition: all 0.4s;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px;
     }
 
-    /* تأخير ظهور كل عنصر */
-    .gallery-item:nth-child(1) { animation-delay: 0.2s; }
-    .gallery-item:nth-child(2) { animation-delay: 0.4s; }
-    .gallery-item:nth-child(3) { animation-delay: 0.6s; }
-    .gallery-item:nth-child(4) { animation-delay: 0.8s; }
-    .gallery-item:nth-child(5) { animation-delay: 1.0s; }
-    .gallery-item:nth-child(6) { animation-delay: 1.2s; }
-
-    .gallery-item:hover {
-      transform: translateY(-15px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(255, 152, 0, 0.4);
-    }
-
-    .gallery-item img {
+    .image-card img {
       width: 100%;
-      height: 250px;
-      object-fit: cover;
-      transition: transform 0.6s;
+      height: auto;
+      border-radius: 15px;
       display: block;
+      pointer-events: none; /* منع سحب الصور */
     }
 
-    .gallery-item:hover img {
-      transform: scale(1.1);
-    }
-
-    .gallery-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-      color: white;
-      padding: 20px;
-      transform: translateY(100%);
-      transition: transform 0.4s;
-      text-align: right;
-    }
-
-    .gallery-item:hover .gallery-overlay {
-      transform: translateY(0);
-    }
-
-    .gallery-overlay h3 {
-      font-size: 1.2rem;
-      margin-bottom: 5px;
-      color: #ff9800;
-    }
-
-    .gallery-overlay p {
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
-
-    /* زر الواتساب المحسن */
-    .whatsapp-wrapper {
-      margin: 70px auto 50px;
-      opacity: 0;
-      animation: scaleIn 1.2s ease-out 1.4s forwards;
-    }
-
-    .whatsapp-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      background: linear-gradient(45deg, #25D366, #128C7E);
-      color: white;
-      text-decoration: none;
-      padding: 18px 45px;
-      border-radius: 60px;
-      font-size: 1.4rem;
-      font-weight: bold;
-      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      position: relative;
-      overflow: hidden;
-      pointer-events: none; /* منع التفاعل مع الزر */
-      cursor: default;
-    }
-
-    .whatsapp-btn::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    .whatsapp-btn:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    .whatsapp-btn:hover {
-      transform: scale(1.1) rotate(2deg);
-      box-shadow: 0 15px 35px rgba(37, 211, 102, 0.6);
-      border-color: #fff;
-    }
-
-    .whatsapp-btn i {
-      font-size: 1.8rem;
-      transition: transform 0.4s;
-    }
-
-    .whatsapp-btn:hover i {
-      transform: rotate(15deg) scale(1.2);
-    }
-
-    /* مؤشر التمرير */
-    .scroll-indicator {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #ff9800, #25D366, #ff9800);
-      width: 0%;
-      z-index: 1000;
-      transition: width 0.1s;
-      box-shadow: 0 0 20px #ff9800;
-      pointer-events: none;
-    }
-
-    /* تذييل الصفحة */
-    .footer {
-      margin-top: 80px;
-      padding: 30px;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(5px);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .footer p {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 1rem;
-    }
-
-    /* تحسينات للأجهزة المحمولة */
-    @media (max-width: 768px) {
-      .header h1 {
-        font-size: 2.5rem;
-      }
-      
-      .gallery {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        padding: 10px;
-      }
-      
-      .slide {
-        height: 150px;
-        width: 250px;
-      }
-      
-      .whatsapp-btn {
-        padding: 15px 30px;
-        font-size: 1.2rem;
-      }
-    }
-
-    /* تأثيرات إضافية */
-    .floating {
-      animation: floating 3s ease-in-out infinite;
-    }
-
-    @keyframes floating {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .glow {
-      animation: glow 2s ease-in-out infinite;
-    }
-
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 20px rgba(255, 152, 0, 0.5); }
-      50% { text-shadow: 0 0 40px rgba(255, 152, 0, 0.8); }
-    }
-
-    /* رسالة التمرير التلقائي */
-    .auto-scroll-message {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(5px);
-      color: white;
-      padding: 12px 25px;
-      border-radius: 50px;
-      font-size: 1rem;
-      border: 2px solid #ff9800;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-      z-index: 999;
-      transform: translateX(150%);
-      transition: transform 0.3s;
-      pointer-events: none;
-    }
-
-    .auto-scroll-message.show {
-      transform: translateX(0);
-    }
-
-    .auto-scroll-message i {
-      color: #ff9800;
-      margin-left: 10px;
-      font-size: 1.2rem;
-    }
-
-    /* طبقة شفافة لمنع أي تفاعل */
-    .touch-blocker {
+    /* تأثير الجسيمات في الخلفية */
+    .bg-particles {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: transparent;
-      z-index: 9998;
-      pointer-events: none; /* نسمح بمرور الأحداث للتمرير */
+      background: radial-gradient(circle at 20% 50%, rgba(255, 152, 0, 0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(37, 211, 102, 0.05) 0%, transparent 50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* للشاشات الصغيرة */
+    @media (max-width: 768px) {
+      .main-title { font-size: 2.5rem; }
+      .scrolling-track { gap: 20px; }
+      .image-card { padding: 5px; border-radius: 15px; }
+      .image-card img { border-radius: 10px; }
     }
   </style>
 </head>
-<body class="no-touch">
+<body>
 
-  <!-- طبقة حماية إضافية (اختيارية) -->
-  <div class="touch-blocker"></div>
+  <!-- طبقة الحماية التي تمنع اللمس نهائياً -->
+  <div class="touch-shield"></div>
 
-  <!-- مؤشر التمرير -->
-  <div class="scroll-indicator" id="scrollIndicator"></div>
+  <!-- خلفية جمالية -->
+  <div class="bg-particles"></div>
 
-  <!-- رسالة التمرير التلقائي -->
-  <div class="auto-scroll-message" id="scrollMessage">
-    <i class="fas fa-arrows-alt-v"></i>
-    <span id="messageText">تمرير تلقائي</span>
+  <!-- العنوان الوحيد في الصفحة -->
+  <div class="title-container">
+    <h1 class="main-title">أعمالنا</h1>
   </div>
 
-  <div class="container">
-    
-    <!-- الهيدر مع التأثيرات -->
-    <div class="header">
-      <h1 class="glow">hamza EL hummada</h1>
-      <p class="subtitle">تحديثات حصرية • عروض مميزة • تخفيضات</p>
+  <!-- حاوية الصور المتحركة -->
+  <div class="gallery-viewport">
+    <div class="scrolling-track" id="auto-scroll-track">
+      <!-- ضع جميع صورك هنا (بدون أي نصوص) -->
+      <div class="image-card"><img src="images/1767593909689.jpg" alt="اعمالنا"></div>
+      <div class="image-card"><img src="images/1767218139132.jpg" alt="اعمالنا"></div>
+      <div class="image-card"><img src="images/1767184659221.jpg" alt="اعمالنا"></div>
+      <div class="image-card"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعمالنا"></div>
+      <div class="image-card"><img src="images/IMG_20260117_061812_292.webp" alt="اعمالنا"></div>
+      <div class="image-card"><img src="images/1769838671987.jpg" alt="اعمالنا"></div>
+      <div class="image-card"><img src="images/1769830307172.png" alt="اعمالنا"></div>
     </div>
-
-    <!-- شريط الصور المتحرك المحسن -->
-    <div class="slider-container">
-      <div class="slider-track">
-        <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/Screenshot_١٩٣٧٥١-٢-٢١-١٢.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
-        <div class="slide"><img src="images/1769838671987.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/1767593909689.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/1767218139132.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/1767184659221.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/1769838671987.jpg" alt="اعلان"></div>
-        <div class="slide"><img src="images/IMG_20260117_061812_292.webp" alt="اعلان"></div>
-        <div class="slide"><img src="images/1769830307172.png" alt="اعلان"></div>
-      </div>
-    </div>
-
-    <!-- معرض الصور المحسن مع تأثيرات التدريج -->
-    <div class="gallery-section">
-      <h2 class="gallery-title">أحدث أعمالنا في تطبيقنا</h2>
-
-      <div class="gallery">
-        <div class="gallery-item">
-          <img src="images/1767593909689.jpg" alt="اعلان">
-          <div class="gallery-overlay">
-            <h3>عرض خاص</h3>
-            <p>تخفيض 30% لفترة محدودة</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item">
-          <img src="images/1767218139132.jpg" alt="اعلان">
-          <div class="gallery-overlay">
-            <h3>منتج جديد</h3>
-            <p>أحدث الإصدارات لعام 2026</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item">
-          <img src="images/1767184659221.jpg" alt="اعلان">
-          <div class="gallery-overlay">
-            <h3>خدمة مميزة</h3>
-            <p>احصل على استشارة مجانية</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item">
-          <img src="images/1769838671987.jpg" alt="اعلان">
-          <div class="gallery-overlay">
-            <h3>عرض حصري</h3>
-            <p>للمشتركين الجدد فقط</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item">
-          <img src="images/IMG_20260117_061812_292.webp" alt="اعلان">
-          <div class="gallery-overlay">
-            <h3>شحن سريع</h3>
-            <p>توصيل مجاني للطلبات</p>
-          </div>
-        </div>
-        
-        <div class="gallery-item">
-          <img src="images/1769830307172.png" alt="اعلان">
-          <div class="gallery-overlay">
-            <h3>تقسيط ميسر</h3>
-            <p>بدون فوائد حتى 12 شهر</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- زر الواتساب المحسن -->
-    <div class="whatsapp-wrapper">
-      <a href="https://wsend.co/905424678123" class="whatsapp-btn" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-        تواصل معنا عبر واتساب
-        <i class="fas fa-arrow-left"></i>
-      </a>
-    </div>
-
-    <!-- تذييل الصفحة -->
-    <div class="footer">
-      <p>© 2026 fawakihAI - جميع الحقوق محفوظة</p>
-    </div>
-
   </div>
 
-  <!-- سكربت التمرير التلقائي والمؤشر -->
   <script>
-    // مؤشر التمرير
-    window.addEventListener('scroll', () => {
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.getElementById('scrollIndicator').style.width = scrolled + '%';
-    });
+    // 1. تقنية النسخ الذكي لضمان تكرار لا نهائي وسلس (Seamless Loop)
+    const track = document.getElementById('auto-scroll-track');
+    // نقوم بنسخ محتوى الصور ولصقه مرة أخرى داخل نفس الحاوية
+    // هذا يجعل حركة الـ CSS تستمر دون انقطاع أو وميض أبيض
+    track.innerHTML += track.innerHTML;
 
-    // تأثير ظهور متدرج للعناصر عند التمرير
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, observerOptions);
-
-    // مراقبة عناصر المعرض
-    document.querySelectorAll('.gallery-item').forEach(item => {
-      observer.observe(item);
-    });
-
-    // =============================================
-    // 🟢 نظام التمرير التلقائي الذكي (بدون أزرار)
-    // =============================================
+    // 2. حماية إضافية عبر الجافاسكربت لمنع أي محاولة للتفاعل
     
-    // متغيرات التمرير التلقائي
-    let scrollInterval;
-    let messageTimeout;
-    let isScrolling = true;
-    let userInteracted = false;
+    // منع النقر بزر الماوس الأيمن (القائمة المنسدلة)
+    document.addEventListener('contextmenu', event => event.preventDefault());
     
-    // سرعة التمرير (بكسل لكل 30 ملي ثانية) - أبطأ قليلاً للقراءة
-    const SCROLL_SPEED = 1.5;
-    const SCROLL_INTERVAL = 30;
-    
-    // عناصر التحكم
-    const scrollMessage = document.getElementById('scrollMessage');
-    const messageText = document.getElementById('messageText');
-    
-    // دالة إظهار الرسالة
-    function showMessage(text) {
-      messageText.textContent = text;
-      scrollMessage.classList.add('show');
-      
-      // إخفاء الرسالة بعد 2 ثانية
-      clearTimeout(messageTimeout);
-      messageTimeout = setTimeout(() => {
-        scrollMessage.classList.remove('show');
-      }, 2000);
-    }
-    
-    // دالة بدء التمرير التلقائي
-    function startAutoScroll() {
-      if (scrollInterval) clearInterval(scrollInterval);
-      
-      scrollInterval = setInterval(() => {
-        if (isScrolling) {
-          // التمرير التدريجي للأسفل
-          window.scrollBy({
-            top: SCROLL_SPEED,
-            behavior: 'auto'
-          });
-          
-          // التحقق إذا وصلنا إلى نهاية الصفحة
-          if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
-            // العودة للأعلى بسلاسة
-            setTimeout(() => {
-              window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-              });
-              // إظهار رسالة إعادة التشغيل
-              showMessage('جاري إعادة التشغيل');
-            }, 100);
-          }
-        }
-      }, SCROLL_INTERVAL);
-    }
-    
-    // دالة إيقاف التمرير التلقائي مؤقتاً
-    function pauseAutoScroll() {
-      if (isScrolling) {
-        isScrolling = false;
-        showMessage('تم إيقاف التمرير مؤقتاً');
-        
-        // إعادة التشغيل بعد 2 ثانية
-        setTimeout(() => {
-          isScrolling = true;
-          showMessage('استئناف التمرير');
-        }, 2000);
+    // منع اختصارات لوحة المفاتيح المتعلقة بالتحديد أو النسخ
+    document.addEventListener('keydown', event => {
+      // منع Ctrl+A, Ctrl+C, Ctrl+U, Ctrl+S
+      if (event.ctrlKey && ['a', 'c', 'u', 's'].includes(event.key.toLowerCase())) {
+        event.preventDefault();
       }
-    }
-    
-    // =============================================
-    // 🟢 منع التمرير اليدوي تماماً
-    // =============================================
-    
-    // منع أحداث التمرير اليدوي (العجلة)
-    window.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      pauseAutoScroll();
-      return false;
-    }, { passive: false });
-    
-    // منع أحداث اللمس للتمرير (على المحمول)
-    window.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      pauseAutoScroll();
-      return false;
-    }, { passive: false });
-    
-    // منع مفاتيح الأسهم و PageUp/PageDown
-    window.addEventListener('keydown', (e) => {
-      const keys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', ' ', 'Home', 'End'];
-      if (keys.includes(e.key)) {
-        e.preventDefault();
-        e.stopPropagation();
-        pauseAutoScroll();
-        return false;
+      // منع أزرار الأسهم والمسطرة للتمرير
+      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', ' '].includes(event.key)) {
+        event.preventDefault();
       }
     });
-    
-    // منع السحب (drag)
-    document.addEventListener('drag', (e) => {
-      e.preventDefault();
-    });
-    
-    document.addEventListener('dragstart', (e) => {
-      e.preventDefault();
-    });
-    
-    // منع التحديد
-    document.addEventListener('selectstart', (e) => {
-      e.preventDefault();
-    });
-    
-    // =============================================
-    // 🟢 بدء التمرير التلقائي
-    // =============================================
-    
-    // بدء التمرير التلقائي عند تحميل الصفحة
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        startAutoScroll();
-        showMessage('بدء العرض التلقائي');
-      }, 1000); // تأخير ثانية واحدة قبل بدء التمرير
-    });
-    
-    // تنظيف عند مغادرة الصفحة
-    window.addEventListener('beforeunload', () => {
-      if (scrollInterval) {
-        clearInterval(scrollInterval);
-        scrollInterval = null;
-      }
-    });
-    
+
+    // منع حركة التمرير بعجلة الماوس
+    window.addEventListener('wheel', event => event.preventDefault(), { passive: false });
+
+    // منع السحب باللمس على الشاشات
+    window.addEventListener('touchmove', event => event.preventDefault(), { passive: false });
   </script>
 
 </body>
