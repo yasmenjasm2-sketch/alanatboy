@@ -15,7 +15,6 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      /* منع تحديد النصوص والصور */
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
@@ -28,12 +27,12 @@
       color: #fff;
       font-family: 'Tajawal', sans-serif;
       height: 100vh;
-      overflow: hidden; /* إخفاء أشرطة التمرير تماماً */
+      overflow: hidden; 
       position: relative;
-      touch-action: none; /* منع إيماءات اللمس */
+      touch-action: none;
     }
 
-    /* طبقة الحماية المخفية - تمنع أي لمس أو نقر على الشاشة */
+    /* طبقة الحماية المخفية */
     .touch-shield {
       position: fixed;
       top: 0;
@@ -52,14 +51,15 @@
       left: 0;
       width: 100%;
       text-align: center;
-      padding: 25px 0;
-      background: linear-gradient(to bottom, rgba(15,32,39,1) 0%, rgba(15,32,39,0) 100%);
+      padding: 20px 0;
+      /* تدرج لوني أطول لدمج العنوان مع الخلفية */
+      background: linear-gradient(to bottom, rgba(15,32,39,1) 0%, rgba(15,32,39,0.8) 50%, transparent 100%);
       z-index: 1000;
       pointer-events: none;
     }
 
     .main-title {
-      font-size: 3.5rem;
+      font-size: 3rem;
       font-weight: 900;
       background: linear-gradient(45deg, #fff, #ff9800, #fff);
       -webkit-background-clip: text;
@@ -70,58 +70,68 @@
     }
 
     @keyframes pulseGlow {
-      0% { text-shadow: 0 5px 20px rgba(255, 152, 0, 0.4); transform: scale(1); }
-      100% { text-shadow: 0 5px 40px rgba(255, 152, 0, 0.8); transform: scale(1.02); }
+      0% { filter: drop-shadow(0 0 10px rgba(255, 152, 0, 0.4)); transform: scale(1); }
+      100% { filter: drop-shadow(0 0 25px rgba(255, 152, 0, 0.8)); transform: scale(1.02); }
     }
 
-    /* 3. حاوية العرض المتحركة (من الأسفل للأعلى) */
+    /* 3. حاوية العرض الأفقية المتحركة */
     .gallery-viewport {
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
+      width: 100vw;
       height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding-top: 120px; /* مسافة للعنوان */
-      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      align-items: center; /* توسيط الصور عمودياً */
+      /* إجبار الاتجاه من اليسار لليمين برمجياً لضمان دقة الحركة */
+      direction: ltr; 
+      /* تدرج إخفاء من اليمين واليسار (Fade edges) */
+      mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
     }
 
     .scrolling-track {
       display: flex;
-      flex-direction: column;
+      flex-direction: row; /* عرض الصور أفقياً بجانب بعضها */
+      align-items: center;
       gap: 30px;
-      width: 90%;
-      max-width: 800px;
-      /* حركة لا نهائية سلسة - يمكنك تعديل 40s لتسريع أو إبطاء الحركة */
-      animation: scrollUpBottom 30s linear infinite;
+      width: max-content; /* يأخذ عرض الصور بالكامل */
+      /* حركة من اليسار لليمين */
+      animation: scrollLeftToRight 30s linear infinite;
+      /* تفعيل تسريع المعالج الرسومي */
+      will-change: transform; 
     }
 
-    @keyframes scrollUpBottom {
-      0% { transform: translateY(0); }
-      /* يتحرك بنسبة 50% لأننا سنقوم بنسخ الصور بالبرمجة ليصبح الطول الضعف */
-      100% { transform: translateY(-50%); } 
+    /* أنيميشن الحركة الأفقية المستمرة (من اليسار لليمين) */
+    @keyframes scrollLeftToRight {
+      0% { transform: translateX(-50%) translateZ(0); } /* يبدأ من النصف المنسوخ باليسار */
+      100% { transform: translateX(0) translateZ(0); } /* يتجه نحو اليمين */
     }
 
-    /* تنسيق الصور */
+    /* تنسيق الصور (تصميم زجاجي عصري) */
     .image-card {
-      width: 100%;
+      /* تحديد أبعاد متناسقة مع شاشات الهواتف */
+      width: 260px; 
+      height: 520px; 
+      flex-shrink: 0; /* منع انضغاط الصور */
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
-      padding: 10px;
+      padding: 8px;
+      /* تأثير زجاجي خفيف */
+      backdrop-filter: blur(5px); 
+      -webkit-backdrop-filter: blur(5px);
     }
 
     .image-card img {
       width: 100%;
-      height: auto;
-      border-radius: 15px;
+      height: 100%;
+      object-fit: cover; /* ملء الإطار مع الحفاظ على الجودة */
+      border-radius: 14px;
       display: block;
-      pointer-events: none; /* منع سحب الصور */
+      pointer-events: none;
     }
 
     /* تأثير الجسيمات في الخلفية */
@@ -131,38 +141,37 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 20% 50%, rgba(255, 152, 0, 0.05) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 80%, rgba(37, 211, 102, 0.05) 0%, transparent 50%);
+      background: radial-gradient(circle at 20% 50%, rgba(255, 152, 0, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(37, 211, 102, 0.08) 0%, transparent 50%);
       z-index: 0;
       pointer-events: none;
     }
 
-    /* للشاشات الصغيرة */
+    /* للشاشات الصغيرة والمتوسطة */
     @media (max-width: 768px) {
-      .main-title { font-size: 2.5rem; }
+      .main-title { font-size: 2.2rem; }
       .scrolling-track { gap: 20px; }
-      .image-card { padding: 5px; border-radius: 15px; }
-      .image-card img { border-radius: 10px; }
+      .image-card { 
+        width: 220px; 
+        height: 450px; 
+        padding: 5px; 
+      }
+      .image-card img { border-radius: 12px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- طبقة الحماية التي تمنع اللمس نهائياً -->
   <div class="touch-shield"></div>
 
-  <!-- خلفية جمالية -->
   <div class="bg-particles"></div>
 
-  <!-- العنوان الوحيد في الصفحة -->
   <div class="title-container">
     <h1 class="main-title">أعمالنا</h1>
   </div>
 
-  <!-- حاوية الصور المتحركة -->
   <div class="gallery-viewport">
     <div class="scrolling-track" id="auto-scroll-track">
-      <!-- ضع جميع صورك هنا (بدون أي نصوص) -->
       <div class="image-card"><img src="images/1767593909689.jpg" alt="اعمالنا"></div>
       <div class="image-card"><img src="images/1767218139132.jpg" alt="اعمالنا"></div>
       <div class="image-card"><img src="images/1767184659221.jpg" alt="اعمالنا"></div>
@@ -176,32 +185,24 @@
   <script>
     // 1. تقنية النسخ الذكي لضمان تكرار لا نهائي وسلس (Seamless Loop)
     const track = document.getElementById('auto-scroll-track');
-    // نقوم بنسخ محتوى الصور ولصقه مرة أخرى داخل نفس الحاوية
-    // هذا يجعل حركة الـ CSS تستمر دون انقطاع أو وميض أبيض
     track.innerHTML += track.innerHTML;
 
     // 2. حماية إضافية عبر الجافاسكربت لمنع أي محاولة للتفاعل
-    
-    // منع النقر بزر الماوس الأيمن (القائمة المنسدلة)
     document.addEventListener('contextmenu', event => event.preventDefault());
     
-    // منع اختصارات لوحة المفاتيح المتعلقة بالتحديد أو النسخ
     document.addEventListener('keydown', event => {
-      // منع Ctrl+A, Ctrl+C, Ctrl+U, Ctrl+S
       if (event.ctrlKey && ['a', 'c', 'u', 's'].includes(event.key.toLowerCase())) {
         event.preventDefault();
       }
-      // منع أزرار الأسهم والمسطرة للتمرير
-      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', ' '].includes(event.key)) {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', ' '].includes(event.key)) {
         event.preventDefault();
       }
     });
 
-    // منع حركة التمرير بعجلة الماوس
+    // منع التمرير واللمس بجميع أشكاله لضمان بقاء العرض السينمائي
     window.addEventListener('wheel', event => event.preventDefault(), { passive: false });
-
-    // منع السحب باللمس على الشاشات
     window.addEventListener('touchmove', event => event.preventDefault(), { passive: false });
+    window.addEventListener('touchstart', event => event.preventDefault(), { passive: false });
   </script>
 
 </body>
