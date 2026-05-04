@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>أعمالنا</title>
+  <title>أعمالنا - فواكه AI</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,13 +23,23 @@
     }
 
     body {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      /* دمج ألوان التطبيق: الأرجواني الداكن والبنفسجي */
+      background: linear-gradient(135deg, #0F051D, #2A0B4E, #0F051D);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
       color: #fff;
       font-family: 'Tajawal', sans-serif;
       height: 100vh;
       overflow: hidden; 
       position: relative;
       touch-action: none;
+    }
+
+    /* حركة الخلفية المتدرجة كما في الأندرويد */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* طبقة الحماية المخفية */
@@ -44,34 +54,35 @@
       cursor: default;
     }
 
-    /* عنوان الصفحة المضيء (بحجم أصغر ومتناسق) */
+    /* عنوان الصفحة المضيء (متناسق مع أيقونة النجمة الذهبية في التطبيق) */
     .title-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       text-align: center;
-      padding: 10px 0; /* تقليل المسافة العلوية */
-      background: linear-gradient(to bottom, rgba(15,32,39,1) 0%, rgba(15,32,39,0.7) 60%, transparent 100%);
+      padding: 10px 0;
+      background: linear-gradient(to bottom, rgba(15,5,29,1) 0%, rgba(15,5,29,0.7) 60%, transparent 100%);
       z-index: 1000;
       pointer-events: none;
     }
 
     .main-title {
-      font-size: 1.6rem; /* تصغير حجم الخط ليتناسب مع الودجت */
+      font-size: 1.6rem;
       font-weight: 900;
-      background: linear-gradient(45deg, #fff, #ff9800, #fff);
+      /* ألوان ذهبية مع بيضاء لتشبه النجمة في التطبيق */
+      background: linear-gradient(45deg, #fff, #F59E0B, #fff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 3px 10px rgba(255, 152, 0, 0.4);
+      text-shadow: 0 3px 10px rgba(245, 158, 11, 0.4);
       letter-spacing: 1px;
       animation: pulseGlow 3s infinite alternate;
       margin-top: 5px;
     }
 
     @keyframes pulseGlow {
-      0% { filter: drop-shadow(0 0 5px rgba(255, 152, 0, 0.4)); transform: scale(1); }
-      100% { filter: drop-shadow(0 0 15px rgba(255, 152, 0, 0.8)); transform: scale(1.02); }
+      0% { filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.4)); transform: scale(1); }
+      100% { filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.8)); transform: scale(1.02); }
     }
 
     /* حاوية العرض الأفقية */
@@ -92,9 +103,9 @@
       display: flex;
       flex-direction: row; 
       align-items: center;
-      gap: 15px; /* تقليل المسافة بين الصور */
+      gap: 15px;
       width: max-content; 
-      animation: scrollLeftToRight 25s linear infinite; /* تسريع بسيط للحركة لتناسب الحجم الصغير */
+      animation: scrollLeftToRight 25s linear infinite;
       will-change: transform; 
     }
 
@@ -103,40 +114,41 @@
       100% { transform: translateX(0) translateZ(0); } 
     }
 
-    /* تنسيق الصور (تعديل الحجم ليصبح مربعاً متناسقاً) */
+    /* تنسيق الصور (بنفس ألوان البوكس في التطبيق: Stroke بنفسجي) */
     .image-card {
-      width: 140px; /* عرض مربع متناسق */
-      height: 140px; /* طول مطابق للعرض ليصبح مربعاً */
-      aspect-ratio: 1 / 1; /* تأكيد الشكل المربع */
+      width: 140px; 
+      height: 140px; 
+      aspect-ratio: 1 / 1; 
       flex-shrink: 0; 
-      border-radius: 12px; /* تصغير دقة الحواف */
+      border-radius: 15px; 
       overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* تخفيف الظل */
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 4px; /* تقليل الحشوة الداخلية */
-      backdrop-filter: blur(5px); 
-      -webkit-backdrop-filter: blur(5px);
+      /* ظل بنفسجي مضيء مثل الأزرار في تطبيقك */
+      box-shadow: 0 8px 25px rgba(157, 78, 221, 0.3);
+      background: #1A0B2E; 
+      border: 2px solid #9D4EDD; 
+      padding: 4px;
+      backdrop-filter: blur(10px); 
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .image-card img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* لضمان عدم تشوه الصورة وتعبئتها للمربع بشكل كامل */
-      border-radius: 8px; /* تصغير حواف الصورة الداخلية */
+      object-fit: cover;
+      border-radius: 10px;
       display: block;
       pointer-events: none;
     }
 
-    /* تأثير الجسيمات في الخلفية */
+    /* هالات بنفسجية في الخلفية للتناسق مع الثيم */
     .bg-particles {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 20% 50%, rgba(255, 152, 0, 0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 80%, rgba(37, 211, 102, 0.08) 0%, transparent 50%);
+      background: radial-gradient(circle at 20% 50%, rgba(157, 78, 221, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(106, 13, 173, 0.15) 0%, transparent 50%);
       z-index: 0;
       pointer-events: none;
     }
@@ -174,9 +186,6 @@
     
     document.addEventListener('keydown', event => {
       if (event.ctrlKey && ['a', 'c', 'u', 's'].includes(event.key.toLowerCase())) {
-        event.preventDefault();
-      }
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', ' '].includes(event.key)) {
         event.preventDefault();
       }
     });
