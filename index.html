@@ -10,23 +10,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&display=swap" rel="stylesheet">
 
   <style>
-    /* التنسيقات العامة ومنع التفاعل */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
       user-select: none;
       -webkit-user-drag: none;
     }
 
     body {
-      /* دمج ألوان التطبيق: الأرجواني الداكن والبنفسجي */
       background: linear-gradient(135deg, #0F051D, #2A0B4E, #0F051D);
-      background-size: 400% 400%;
-      animation: gradientBG 10s ease infinite;
       color: #fff;
       font-family: 'Tajawal', sans-serif;
       height: 100vh;
@@ -35,14 +29,6 @@
       touch-action: none;
     }
 
-    /* حركة الخلفية المتدرجة كما في الأندرويد */
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* طبقة الحماية المخفية */
     .touch-shield {
       position: fixed;
       top: 0;
@@ -50,107 +36,52 @@
       width: 100vw;
       height: 100vh;
       z-index: 9999;
-      background: transparent;
-      cursor: default;
     }
 
-    /* عنوان الصفحة المضيء (متناسق مع أيقونة النجمة الذهبية في التطبيق) */
-    .title-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      padding: 10px 0;
-      background: linear-gradient(to bottom, rgba(15,5,29,1) 0%, rgba(15,5,29,0.7) 60%, transparent 100%);
-      z-index: 1000;
-      pointer-events: none;
-    }
-
-    .main-title {
-      font-size: 1.6rem;
-      font-weight: 900;
-      /* ألوان ذهبية مع بيضاء لتشبه النجمة في التطبيق */
-      background: linear-gradient(45deg, #fff, #F59E0B, #fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 3px 10px rgba(245, 158, 11, 0.4);
-      letter-spacing: 1px;
-      animation: pulseGlow 3s infinite alternate;
-      margin-top: 5px;
-    }
-
-    @keyframes pulseGlow {
-      0% { filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.4)); transform: scale(1); }
-      100% { filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.8)); transform: scale(1.02); }
-    }
-
-    /* حاوية العرض الأفقية */
     .gallery-viewport {
       position: absolute;
-      top: 0;
+      top: 0; /* لضمان التوسيط في الشاشة */
       left: 0;
       width: 100vw;
       height: 100vh;
       display: flex;
       align-items: center; 
       direction: ltr; 
-      mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
     }
 
     .scrolling-track {
       display: flex;
       flex-direction: row; 
       align-items: center;
-      gap: 15px;
+      gap: 0px; /* إزالة الفراغات تماماً بين الصور */
       width: max-content; 
       animation: scrollLeftToRight 25s linear infinite;
-      will-change: transform; 
     }
 
     @keyframes scrollLeftToRight {
-      0% { transform: translateX(-50%) translateZ(0); }
-      100% { transform: translateX(0) translateZ(0); } 
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); } 
     }
 
-    /* تنسيق الصور (بنفس ألوان البوكس في التطبيق: Stroke بنفسجي) */
+    /* السر هنا لتصغير المحيط (البوكس) على مقاس الصورة بالضبط */
     .image-card {
-      width: 140px; 
-      height: 140px; 
-      aspect-ratio: 1 / 1; 
+      height: 250px; /* نثبت الارتفاع فقط */
+      width: auto;   /* العرض تلقائي ليتقلص المحيط على مقاس الصورة بالضبط بدون أي فراغ إضافي */
       flex-shrink: 0; 
-      border-radius: 15px; 
-      overflow: hidden;
-      /* ظل بنفسجي مضيء مثل الأزرار في تطبيقك */
-      box-shadow: 0 8px 25px rgba(157, 78, 221, 0.3);
-      background: #1A0B2E; 
-      border: 2px solid #9D4EDD; 
-      padding: 4px;
-      backdrop-filter: blur(10px); 
-      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0px; /* إزالة البادينج لضمان الالتصاق */
     }
 
+    /* عرض الصورة كاملة بدون قص */
     .image-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
+      height: 100%; /* تأخذ كامل الارتفاع */
+      width: auto;  /* العرض يتكيف تلقائياً مع الارتفاع بدون تشويه */
       display: block;
       pointer-events: none;
-    }
-
-    /* هالات بنفسجية في الخلفية للتناسق مع الثيم */
-    .bg-particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 20% 50%, rgba(157, 78, 221, 0.15) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 80%, rgba(106, 13, 173, 0.15) 0%, transparent 50%);
-      z-index: 0;
-      pointer-events: none;
+      border-top: 2px solid #9D4EDD; /* إطار علوي وسفلي فقط للجمالية */
+      border-bottom: 2px solid #9D4EDD;
     }
   </style>
 </head>
@@ -158,42 +89,22 @@
 
   <div class="touch-shield"></div>
 
-  <div class="bg-particles"></div>
-
-  <div class="title-container">
-    <h1 class="main-title">أعمالنا</h1>
-  </div>
-
   <div class="gallery-viewport">
     <div class="scrolling-track" id="auto-scroll-track">
+      <!-- تم إضافة صورة 1000168810.jpg كما طلبت -->
+      <div class="image-card"><img src="1000168810.jpg" alt="أعمالنا"></div>
       <div class="image-card"><img src="images/1767593909689.jpg" alt="اعمالنا"></div>
       <div class="image-card"><img src="images/1767218139132.jpg" alt="اعمالنا"></div>
       <div class="image-card"><img src="images/1767184659221.jpg" alt="اعمالنا"></div>
       <div class="image-card"><img src="images/fame.jpg" alt="اعمالنا"></div>
       <div class="image-card"><img src="images/IMG_20260117_061812_292.webp" alt="اعمالنا"></div>
-      <div class="image-card"><img src="images/1769838671987.jpg" alt="اعمالنا"></div>
-      <div class="image-card"><img src="images/1769830307172.png" alt="اعمالنا"></div>
     </div>
   </div>
 
   <script>
-    // النسخ الذكي لضمان تكرار لا نهائي وسلس
     const track = document.getElementById('auto-scroll-track');
+    // نسخ المحتوى لضمان التكرار اللانهائي السلس
     track.innerHTML += track.innerHTML;
-
-    // حماية إضافية عبر الجافاسكربت لمنع أي محاولة للتفاعل
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    
-    document.addEventListener('keydown', event => {
-      if (event.ctrlKey && ['a', 'c', 'u', 's'].includes(event.key.toLowerCase())) {
-        event.preventDefault();
-      }
-    });
-
-    // منع التمرير واللمس بجميع أشكاله
-    window.addEventListener('wheel', event => event.preventDefault(), { passive: false });
-    window.addEventListener('touchmove', event => event.preventDefault(), { passive: false });
-    window.addEventListener('touchstart', event => event.preventDefault(), { passive: false });
   </script>
 
 </body>
