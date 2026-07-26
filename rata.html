@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استرداد الأموال</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #38bdf8;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid #475569;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            border-color: #38bdf8;
+        }
+        .hidden {
+            display: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.1s;
+            margin-top: 10px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .status-msg {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>طلب استرداد الأموال</h2>
+        <form id="refundForm">
+            <div class="form-group">
+                <label for="phone">رقم الهاتف</label>
+                <input type="tel" id="phone" required placeholder="أدخل رقم هاتفك">
+            </div>
+
+            <div class="form-group">
+                <label for="subCode">كود الاشتراك</label>
+                <input type="text" id="subCode" required placeholder="أدخل كود الاشتراك الخاص بك">
+            </div>
+
+            <div class="form-group">
+                <label for="paymentMethod">طريقة الدفع</label>
+                <select id="paymentMethod" required onchange="toggleOtherField()">
+                    <option value="" disabled selected>اختر طريقة الدفع</option>
+                    <option value="PayPal">PayPal</option>
+                    <option value="USDT TRON">USDT (TRON - TRC20)</option>
+                    <option value="Other">طريقة أخرى</option>
+                </select>
+            </div>
+
+            <div class="form-group hidden" id="otherMethodGroup">
+                <label for="otherMethodDetails">تفاصيل طريقة التحويل الأخرى</label>
+                <input type="text" id="otherMethodDetails" placeholder="اكتب اسم طريقة التحويل ورقم الحساب/المحفظة">
+            </div>
+
+            <button type="submit" id="submitBtn">إرسال الطلب</button>
+            <div id="responseMessage" class="status-msg"></div>
+        </form>
+    </div>
+
+    <script>
+        // Telegram Bot Configuration
+        const botToken = "7894436976:AAFdg77dpzCgpeLnkwAQqP9POkwZMwWoikg";
+        const chatId = "5998250367";
+
+        function toggleOtherField() {
+            const method = document.getElementById("paymentMethod").value;
+            const otherGroup = document.getElementById("otherMethodGroup");
+            if (method === "Other") {
+                otherGroup.classList.remove("hidden");
+                document.getElementById("otherMethodDetails").setAttribute("required", "true");
+            } else {
+                otherGroup.classList.add("hidden");
+                document.getElementById("otherMethodDetails").removeAttribute("required");
+            }
+        }
+
+        document.getElementById("refundForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const phone = document.getElementById("phone").value;
+            const subCode = document.getElementById("subCode").value;
+            const paymentMethod = document.getElementById("paymentMethod").value;
+            const otherDetails = document.getElementById("otherMethodDetails").value;
+
+            // Retrieve Device ID securely from Android WebView JavascriptInterface if available
+            let deviceId = "غير متوفر (متصفح عادٍ)";
+            try {
+                if (window.AndroidBridge && typeof window.AndroidBridge.getDeviceId === "function") {
+                    deviceId = window.AndroidBridge.getDeviceId();
+                }
+            } catch (err) {
+                console.log("Device ID retrieval error:", err);
+            }
+
+            // Format message for Telegram
+            let message = `🚨 *طلب استرداد أموال جديد* 🚨\n\n`;
+            message += `📱 *رقم الهاتف:* \`${phone}\`\n`;
+            message += `🔑 *كود الاشتراك:* \`${subCode}\`\n`;
+            message += `💳 *طريقة الدفع:* ${paymentMethod}\n`;
+            if (paymentMethod === "Other") {
+                message += `📝 *تفاصيل التحويل الأخرى:* ${otherDetails}\n`;
+            }
+            message += `💻 *معرف الجهاز (Device ID):* \`${deviceId}\``;
+
+            const submitBtn = document.getElementById("submitBtn");
+            const responseMessage = document.getElementById("responseMessage");
+            
+            submitBtn.disabled = true;
+            submitBtn.innerText = "جاري الإرسال...";
+
+            // Send payload directly to Telegram Bot API
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: "Markdown"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    responseMessage.style.color = "#4ade80";
+                    responseMessage.innerText = "تم إرسال طلبك بنجاح!";
+                    document.getElementById("refundForm").reset();
+                    document.getElementById("otherMethodGroup").classList.add("hidden");
+                } else {
+                    responseMessage.style.color = "#f87171";
+                    responseMessage.innerText = "فشل في إرسال الطلب، حاول مرة أخرى.";
+                }
+                submitBtn.disabled = false;
+                submitBtn.innerText = "إرسال الطلب";
+            })
+            .catch(error => {
+                responseMessage.style.color = "#f87171";
+                responseMessage.innerText = "حدث خطأ بالاتصال.";
+                submitBtn.disabled = false;
+                submitBtn.innerText = "إرسال الطلب";
+            });
+        });
+    </script>
+</body>
+</html>
